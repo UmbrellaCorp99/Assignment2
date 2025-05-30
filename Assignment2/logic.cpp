@@ -6,6 +6,18 @@
 bool logic::already_played() {
 
 }
-void logic::get_shape(int index) {
+void logic::get_shape() {
+
+}
+void logic::set_shape() {
+
+}
+void logic::compare() {
+
+}
+void logic::reset_clear() {
+
+}
+void logic::random_create() {
 
 }
