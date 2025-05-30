@@ -1,5 +1,6 @@
 #include <iostream>
 #include "graphics.h"
+#include "logic.h"
 
 int main()
 {
