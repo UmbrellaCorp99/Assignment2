@@ -21,9 +21,6 @@
     <ClCompile Include="logic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="concentration.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics.h">

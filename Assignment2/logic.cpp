@@ -3,13 +3,13 @@
 
 #include "logic.h"
 
-bool logic::already_played() {
+void logic::already_played() {
 
 }
-void logic::get_shape() {
-
+char logic::get_shape(int index, int index2) {
+	return pattern[index][index2];
 }
-void logic::set_shape() {
+void logic::set_shape(int index, int index2, char c) {
 
 }
 void logic::compare() {
