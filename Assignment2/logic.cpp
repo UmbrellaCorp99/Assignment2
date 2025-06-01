@@ -2,6 +2,7 @@
 //Assignment 2
 
 #include "logic.h"
+#include <time.h>
 
 void logic::setup() {
 	for (int i = 0; i < 5; i++) {
@@ -34,10 +35,9 @@ bool logic::compare(int i, int j, int k, int l) {
 	return same;
 }
 void logic::reset_clear() {
-
 }
 void logic::random_create() {
-
+	
 }
 void logic::correctGuess(int index, int index2) {
 	boardPattern[index][index2] = 'X';

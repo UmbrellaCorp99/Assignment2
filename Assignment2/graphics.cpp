@@ -17,6 +17,14 @@ void draw_square(int x, int y);
 void draw_circle(int x, int y);
 void draw_rectangle(int x, int y);
 void draw_oval(int x, int y);
+void draw_triangle(int x, int y);
+void draw_arc(int x, int y);
+void draw_green_square(int x, int y);
+void draw_red_circle(int x, int y);
+void draw_orange_rectangle(int x, int y);
+void draw_purple_oval(int x, int y);
+void draw_yellow_triangle(int x, int y);
+void draw_blue_arc(int x, int y);
 void draw_X(int index1, int index2);
 
 int mx, my;
@@ -61,16 +69,6 @@ int main(void)
     }
     gameLogic.setup();
     al_register_event_source(eventQueue, al_get_mouse_event_source());
-    gameLogic.set_shape(0, 0, 'r');
-    gameLogic.set_shape(1, 0, 's');
-    gameLogic.set_shape(2, 0, 'c');
-    gameLogic.set_shape(3, 0, 'o');
-    gameLogic.set_shape(4, 0, 'r');
-    gameLogic.set_shape(0, 1, 'r');
-    gameLogic.set_shape(1, 1, 's');
-    gameLogic.set_shape(2, 1, 'c');
-    gameLogic.set_shape(3, 1, 'o');
-    gameLogic.set_shape(4, 1, 'r');
     
     draw_grid();
     al_flip_display();
@@ -299,6 +297,12 @@ void draw_objects(int index1, int index2, logic &gameLogic) {
     else if (gameLogic.get_shape(index1, index2) == 'o') {
         draw_oval(x, y);
     }
+    else if (gameLogic.get_shape(index1, index2) == 't') {
+        draw_triangle(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'a') {
+        draw_arc(x, y);
+    }
     else if (gameLogic.get_shape(index1, index2) == 'X') {
         draw_X(x, y);
     }
@@ -328,9 +332,33 @@ void draw_rectangle(int x, int y) {
     al_draw_rectangle(x - 45, y - 20, x + 45, y + 20, al_map_rgb(0, 0, 255), 3);
 }
 void draw_oval(int x, int y) {
-    al_draw_filled_ellipse(x, y, 45, 20, al_map_rgb(255, 255, 0));
+    al_draw_ellipse(x, y, 45, 20, al_map_rgb(255, 255, 0), 3);
 }
 void draw_X(int x, int y) {
     al_draw_line(x - 50, y - 60, x + 50, y + 60, al_map_rgb(122, 0, 0), 3);
     al_draw_line(x + 50, y - 60, x - 50, y + 60, al_map_rgb(122, 0, 0), 3);
+}
+void draw_triangle(int x, int y) {
+    al_draw_triangle(x - 45, y + 45, x + 45, y + 45, x, y - 45, al_map_rgb(255,0,255), 3);
+}
+void draw_arc(int x, int y) {
+    al_draw_arc(x, y, 45, 90, 180, al_map_rgb(255, 165, 0), 3);
+}
+void draw_green_square(int x, int y) {
+    al_draw_rectangle(x - 45, y - 45, x + 45, y + 45, al_map_rgb(0, 255, 0), 3);
+}
+void draw_red_circle(int x, int y) {
+    al_draw_circle(x, y, 45, al_map_rgb(255, 0, 0), 3);
+}
+void draw_orange_rectangle(int x, int y) {
+    al_draw_rectangle(x - 45, y - 20, x + 45, y + 20, al_map_rgb(255, 165, 0), 3);
+}
+void draw_purple_oval(int x, int y) {
+    al_draw_ellipse(x, y, 45, 20, al_map_rgb(255, 0, 255), 3);
+}
+void draw_yellow_triangle(int x, int y) {
+    al_draw_triangle(x - 45, y + 45, x + 45, y + 45, x, y - 45, al_map_rgb(255, 255, 0), 3);
+}
+void draw_blue_arc(int x, int y) {
+    al_draw_arc(x, y, 45, 90, 180, al_map_rgb(0, 0, 255), 3);
 }
