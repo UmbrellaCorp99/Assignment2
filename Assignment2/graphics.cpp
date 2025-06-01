@@ -7,17 +7,25 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_native_dialog.h>
-#include "graphics.h"
+//#include "graphics.h"
 #include "logic.h"
+
+void get_mouse_input(int x, int y, logic &gameLogic);
+void draw_objects(int x, int y, int index1, int index2, logic &gameLogic);
+void draw_grid();
+void draw_status();
+void draw_square(int x, int y);
+void draw_circle(int x, int y);
+void draw_rectangle(int x, int y);
+void draw_oval(int x, int y);
 
 int mx, my;
 
 int main(void)
 {
     logic gameLogic;
-    graphics graphic;
     bool done = false, flip = false;
-    char shape;
+    char shape = ' ';
     int count = 0;
     ALLEGRO_DISPLAY *display = NULL;
     if (!al_init()) {
@@ -42,22 +50,24 @@ int main(void)
     eventQueue = al_create_event_queue();
     al_register_event_source(eventQueue, al_get_display_event_source(display));
     al_clear_to_color(al_map_rgb(255, 255, 255));
+    
 
     if (!al_install_mouse()) {
         al_show_native_message_box(display, "Error", "Failed to initialize mouse", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
-
+    gameLogic.setup();
+    draw_grid();
+    al_flip_display();
     al_register_event_source(eventQueue, al_get_mouse_event_source());
     gameLogic.set_shape(0, 0, 'r');
     while (!done) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(eventQueue, &ev);
-        al_clear_to_color(al_map_rgb(255, 255, 255));
-        graphic.draw_grid();
         if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             done = true;
         }
+        draw_grid();
         if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
             if (ev.mouse.button & 1) {
                 mx = ev.mouse.x;
@@ -65,9 +75,9 @@ int main(void)
                 flip = true;
             }
         }
-        if (flip == true) {
-            graphic.get_mouse_input(mx, my);
-            graphic.draw_objects(mx, my, gameLogic);
+        if (flip) {
+            get_mouse_input(mx, my, gameLogic);
+            flip = false;
         }
         al_flip_display();
     }
@@ -76,11 +86,10 @@ int main(void)
     al_destroy_font(font);
 }
 
-void graphics::get_mouse_input(int x, int y) {
+void get_mouse_input(int x, int y, logic &gameLogic) {
     if (x >= 0 && x < 99) {
         if (y >= 0 && y < 99) {
-            x = 50;
-            y = 50;
+            draw_objects(50, 50, 0, 0, gameLogic);
         }
         else if (y >= 100 && y < 199) {
             x = 50;
@@ -188,13 +197,12 @@ void graphics::get_mouse_input(int x, int y) {
         }
     }
 }
-void graphics::draw_objects(int x, int y, logic &gameLogic) {
-    char shape = gameLogic.get_shape(x, y);
-    if (shape == 'r') {
+void draw_objects(int x, int y, int index1, int index2, logic &gameLogic) {
+    if (gameLogic.get_shape(index1, index2) == 'r') {
         draw_rectangle(x, y);
     }
 }
-void graphics::draw_grid() {
+void draw_grid() {
     al_draw_line(100, 0, 100, 600, al_map_rgb(0, 0, 0), 1);
     al_draw_line(200, 0, 200, 600, al_map_rgb(0, 0, 0), 1);
     al_draw_line(300, 0, 300, 600, al_map_rgb(0, 0, 0), 1);
@@ -206,7 +214,7 @@ void graphics::draw_grid() {
     al_draw_line(0, 360, 500, 360, al_map_rgb(0, 0, 0), 1);
     al_draw_line(0, 480, 500, 480, al_map_rgb(0, 0, 0), 1);
 }
-void graphics::draw_status() {
+void draw_status() {
 
 }
 void draw_square(int x, int y) {

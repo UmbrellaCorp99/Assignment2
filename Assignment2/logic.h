@@ -1,6 +1,7 @@
 class logic
 {
 public:
+	void setup();
 	void already_played();
 	char get_shape(int index, int index2);
 	void set_shape(int index, int index2, char c);
@@ -8,7 +9,7 @@ public:
 	void reset_clear();
 	void random_create();
 private:
-	char pattern[5][5];
+	char boardPattern[5][5];
 	char playedBoard[5][5];
 };
 
