@@ -20,8 +20,18 @@ char logic::get_shape(int index, int index2) {
 void logic::set_shape(int index, int index2, char c) {
 	boardPattern[index][index2] = c;
 }
-void logic::compare(char c1, char c2) {
-
+bool logic::compare(int i, int j, int k, int l) {
+	bool same = false;
+	if (i == k && j == l) {
+		same = false;
+	}
+	else if (get_shape(i, j) == get_shape(k, l)) {
+		same = true;
+	}
+	else {
+		same = false;
+	}
+	return same;
 }
 void logic::reset_clear() {
 
@@ -29,3 +39,7 @@ void logic::reset_clear() {
 void logic::random_create() {
 
 }
+void logic::correctGuess(int index, int index2) {
+	boardPattern[index][index2] = 'X';
+}
+
