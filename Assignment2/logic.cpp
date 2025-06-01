@@ -10,7 +10,7 @@ char logic::get_shape(int index, int index2) {
 	return pattern[index][index2];
 }
 void logic::set_shape(int index, int index2, char c) {
-
+	pattern[index][index2] = c;
 }
 void logic::compare() {
 
