@@ -10,6 +10,8 @@
 #include "graphics.h"
 #include "logic.h"
 
+int mx, my;
+
 int main(void)
 {
     logic gameLogic;
@@ -26,8 +28,38 @@ int main(void)
         al_show_native_message_box(NULL, "Error", "Failed to create display", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
+
+    ALLEGRO_EVENT_QUEUE* eventQueue = NULL;
+
     al_init_primitives_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
+
+    ALLEGRO_FONT* font = al_load_font("Movistar Text Regular.ttf", 24, 0);
+   
+    eventQueue = al_create_event_queue();
+    al_register_event_source(eventQueue, al_get_display_event_source(display));
+    al_clear_to_color(al_map_rgb(255, 255, 255));
+
+    if (!al_install_mouse()) {
+        al_show_native_message_box(display, "Error", "Failed to initialize mouse", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
+        return -1;
+    }
+
+    al_register_event_source(eventQueue, al_get_mouse_event_source());
+
     while (!done) {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(eventQueue, &ev);
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            done = true;
+        }
+        if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+            if (ev.mouse.button & 1) {
+                mx = ev.mouse.x;
+                my = ev.mouse.y;
+            }
+        }
         al_clear_to_color(al_map_rgb(255, 255, 255));
         graphic.draw_grid();
         al_flip_display();
