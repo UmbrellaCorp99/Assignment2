@@ -23,9 +23,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="logic.h">
       <Filter>Header Files</Filter>
     </ClInclude>

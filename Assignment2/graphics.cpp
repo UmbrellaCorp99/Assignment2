@@ -7,7 +7,6 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_native_dialog.h>
-//#include "graphics.h"
 #include "logic.h"
 
 void get_mouse_input(int x, int y, logic &gameLogic);
@@ -57,10 +56,20 @@ int main(void)
         return -1;
     }
     gameLogic.setup();
-    draw_grid();
-    al_flip_display();
     al_register_event_source(eventQueue, al_get_mouse_event_source());
     gameLogic.set_shape(0, 0, 'r');
+    gameLogic.set_shape(1, 0, 's');
+    gameLogic.set_shape(2, 0, 'c');
+    gameLogic.set_shape(3, 0, 'o');
+    gameLogic.set_shape(4, 0, 'r');
+    gameLogic.set_shape(0, 1, 'r');
+    gameLogic.set_shape(1, 1, 's');
+    gameLogic.set_shape(2, 1, 'c');
+    gameLogic.set_shape(3, 1, 'o');
+    gameLogic.set_shape(4, 1, 'r');
+    
+    draw_grid();
+    al_flip_display();
     while (!done) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(eventQueue, &ev);
@@ -76,8 +85,19 @@ int main(void)
             }
         }
         if (flip) {
-            get_mouse_input(mx, my, gameLogic);
-            flip = false;
+            if (mx >= 0 and mx <= 600) {
+                get_mouse_input(mx, my, gameLogic);
+                al_draw_textf(font, al_map_rgb(0, 0, 0), mx, my, 0, "%i, %i", mx, my);
+                count++;
+                flip = false;
+            }
+        }
+        if (count == 2) {
+            al_flip_display();
+            al_rest(3);
+            al_clear_to_color(al_map_rgb(255, 255, 255));
+            draw_grid();
+            count = 0;
         }
         al_flip_display();
     }
@@ -88,118 +108,103 @@ int main(void)
 
 void get_mouse_input(int x, int y, logic &gameLogic) {
     if (x >= 0 && x < 99) {
-        if (y >= 0 && y < 99) {
-            draw_objects(50, 50, 0, 0, gameLogic);
+        if (y >= 0 && y < 119) {
+            draw_objects(50, 60, 0, 0, gameLogic);
         }
-        else if (y >= 100 && y < 199) {
-            x = 50;
-            y = 150;
+        else if (y >= 120 && y < 239) {
+            draw_objects(50, 180, 1, 0, gameLogic);
         }
-        else if (y >= 200 && y < 299) {
-            x = 50;
-            y = 250;
+        else if (y >= 240 && y < 359) {
+            draw_objects(50, 300, 2, 0, gameLogic);
         }
-        else if (y >= 300 && y < 399) {
-            x = 50;
-            y = 350;
+        else if (y >= 360 && y < 479) {
+            draw_objects(50, 420, 3, 0, gameLogic);
         }
-        else if (y >= 400 && y < 499) {
-            x = 50;
-            y = 450;
+        else if (y >= 480 && y < 599) {
+            draw_objects(50, 540, 4, 0, gameLogic);
         }
     }
     else if (x >= 100 && x < 199) {
-        if (y >= 0 && y < 99) {
-            x = 150;
-            y = 50;
+        if (y >= 0 && y < 119) {
+            draw_objects(150, 60, 0, 1, gameLogic);
         }
-        else if (y >= 100 && y < 199) {
-            x = 150;
-            y = 150;
+        else if (y >= 120 && y < 239) {
+            draw_objects(150, 180, 1, 1, gameLogic);
         }
-        else if (y >= 200 && y < 299) {
-            x = 150;
-            y = 250;
+        else if (y >= 240 && y < 359) {
+            draw_objects(150, 300, 2, 1, gameLogic);
         }
-        else if (y >= 300 && y < 399) {
-            x = 150;
-            y = 350;
+        else if (y >= 360 && y < 479) {
+            draw_objects(150, 420, 3, 1, gameLogic);
         }
-        else if (y >= 400 && y < 499) {
-            x = 150;
-            y = 450;
+        else if (y >= 480 && y < 599) {
+            draw_objects(150, 540, 4, 1, gameLogic);
         }
     }
     else if (x >= 200 && x < 299) {
         if (y >= 0 && y < 99) {
-            x = 250;
-            y = 50;
+            draw_objects(250, 60, 0, 2, gameLogic);
         }
         else if (y >= 100 && y < 199) {
-            x = 250;
-            y = 150;
+            draw_objects(250, 180, 1, 2, gameLogic);
         }
         else if (y >= 200 && y < 299) {
-            x = 250;
-            y = 250;
+            draw_objects(250, 300, 2, 2, gameLogic);
         }
         else if (y >= 300 && y < 399) {
-            x = 250;
-            y = 350;
+            draw_objects(250, 420, 3, 2, gameLogic);
         }
         else if (y >= 400 && y < 499) {
-            x = 250;
-            y = 450;
+            draw_objects(250, 540, 4, 2, gameLogic);
         }
     }
     else if (x >= 300 && x < 399) {
         if (y >= 0 && y < 99) {
-            x = 350;
-            y = 50;
+            draw_objects(350, 60, 0, 3, gameLogic);
         }
         else if (y >= 100 && y < 199) {
-            x = 350;
-            y = 150;
+            draw_objects(350, 180, 1, 3, gameLogic);
         }
         else if (y >= 200 && y < 299) {
-            x = 350;
-            y = 250;
+            draw_objects(350, 300, 2, 3, gameLogic);
         }
         else if (y >= 300 && y < 399) {
-            x = 350;
-            y = 350;
+            draw_objects(350, 420, 3, 3, gameLogic);
         }
         else if (y >= 400 && y < 499) {
-            x = 350;
-            y = 450;
+            draw_objects(350, 540, 4, 3, gameLogic);
         }
     }
     else if (x >= 400 && x < 499) {
         if (y >= 0 && y < 99) {
-            x = 450;
-            y = 50;
+            draw_objects(450, 60, 0, 4, gameLogic);
         }
         else if (y >= 100 && y < 199) {
-            x = 450;
-            y = 150;
+            draw_objects(450, 180, 1, 4, gameLogic);
         }
         else if (y >= 200 && y < 299) {
-            x = 450;
-            y = 250;
+            draw_objects(450, 300, 2, 4, gameLogic);
         }
         else if (y >= 300 && y < 399) {
-            x = 450;
-            y = 350;
+            draw_objects(450, 420, 3, 4, gameLogic);
         }
         else if (y >= 400 && y < 499) {
-            x = 450;
-            y = 450;
+            draw_objects(450, 540, 4, 4, gameLogic);
         }
     }
 }
 void draw_objects(int x, int y, int index1, int index2, logic &gameLogic) {
     if (gameLogic.get_shape(index1, index2) == 'r') {
         draw_rectangle(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 's') {
+        draw_square(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'c') {
+        draw_circle(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'o') {
+        draw_oval(x, y);
     }
 }
 void draw_grid() {

@@ -133,7 +133,6 @@
     <ClCompile Include="logic.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="graphics.h" />
     <ClInclude Include="logic.h" />
   </ItemGroup>
   <ItemGroup>
