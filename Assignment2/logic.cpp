@@ -26,12 +26,9 @@ char logic::get_shape(int index, int index2) {
 	return boardPattern[index][index2];
 }
 
-//This function sets the specified index to the specified char. Used when changing the original value to the 'n' char when a pair is matched
-//Takes two integers representing the index and a char as the parameters
-//No return
-void logic::set_shape(int index, int index2, char c) {
-	boardPattern[index][index2] = c;
-}
+//This function compares the value at two specified indexes. If the same index is chosed or the elements do not match, it will return false
+//Takes four integers representing two different indexes
+//Returns a boolean value
 bool logic::compare(int i, int j, int k, int l) {
 	bool same = false;
 	if (i == k && j == l) {
@@ -45,9 +42,17 @@ bool logic::compare(int i, int j, int k, int l) {
 	}
 	return same;
 }
+
+//This functions calls the setup() function when called
+//Takes no parameters
+//No return
 void logic::reset_clear() {
 	setup();
 }
+
+//This function changes the value at a specified index to the letter 'X' indicating that it is part of a matched pair
+//Takes two integers representing an index
+//No return
 void logic::correctGuess(int index, int index2) {
 	boardPattern[index][index2] = 'X';
 }
