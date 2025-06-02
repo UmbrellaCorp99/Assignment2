@@ -38,45 +38,56 @@ int main(void)
     int count = 0;
     int index1 = 0, index2 = 0, index3 = 0, index4 = 0;
     int points = 0;
+    int width = 800, height = 600;
     srand(time(0));
 
     ALLEGRO_DISPLAY *display = NULL;
+    ALLEGRO_EVENT_QUEUE* eventQueue = NULL;
+    ALLEGRO_TIMER* timer = NULL;
+
     if (!al_init()) {
         al_show_native_message_box(NULL, "Error", "Allegro failed to initialize", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
-    int width = 800, height = 600;
+    
     display = al_create_display(width, height);
     if (display == NULL) {
         al_show_native_message_box(NULL, "Error", "Failed to create display", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
         return -1;
     }
 
-    ALLEGRO_EVENT_QUEUE* eventQueue = NULL;
+    if (!al_install_mouse()) {
+        al_show_native_message_box(display, "Error", "Failed to initialize mouse", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
+        return -1;
+    }
 
+    al_install_keyboard();
     al_init_primitives_addon();
     al_init_font_addon();
     al_init_ttf_addon();
 
     ALLEGRO_FONT* font = al_load_font("Movistar Text Regular.ttf", 24, 0);
-   
     eventQueue = al_create_event_queue();
+    al_register_event_source(eventQueue, al_get_keyboard_event_source());
     al_register_event_source(eventQueue, al_get_display_event_source(display));
-    al_clear_to_color(al_map_rgb(255, 255, 255));
-    
-
-    if (!al_install_mouse()) {
-        al_show_native_message_box(display, "Error", "Failed to initialize mouse", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
-        return -1;
-    }
-    gameLogic.setup();
     al_register_event_source(eventQueue, al_get_mouse_event_source());
-
+    gameLogic.setup();
+    
+    
+    al_clear_to_color(al_map_rgb(255, 255, 255));
     draw_grid();
+    al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 200, 0, "Total Pairs: %i", 12);
+    al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 300, 0, "Pairs Matched: %i", points);
+    al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 400, 0, "Pairs Remaining: %i", 12-points);
+    al_draw_text(font, al_map_rgb(255, 0, 0), 430, 530, ALLEGRO_ALIGN_LEFT, "Reset");
     al_flip_display();
+
+
     while (!done) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(eventQueue, &ev);
+
+        
         if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             done = true;
         }
@@ -141,6 +152,10 @@ int main(void)
                             draw_objects(i, j, gameLogic);
                         }
                 }
+                al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 200, 0, "Total Pairs: %i", 12);
+                al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 300, 0, "Pairs Matched: %i", points);
+                al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 400, 0, "Pairs Remaining: %i", 12 - points);
+                al_draw_text(font, al_map_rgb(255, 0, 0), 430, 530, ALLEGRO_ALIGN_LEFT, "Reset");
                 al_flip_display();
             }
             else {
@@ -154,13 +169,34 @@ int main(void)
                             draw_objects(i, j, gameLogic);
                         }
                 }
+                al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 200, 0, "Total Pairs: %i", 12);
+                al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 300, 0, "Pairs Matched: %i", points);
+                al_draw_textf(font, al_map_rgb(0, 0, 0), 550, 400, 0, "Pairs Remaining: %i", 12 - points);
+                al_draw_text(font, al_map_rgb(255, 0, 0), 430, 530, ALLEGRO_ALIGN_LEFT, "Reset");
                 al_flip_display();
+            }
+        }
+        if (points == 12 && count == 0) {
+            al_clear_to_color(al_map_rgb(255, 255, 255));
+            draw_grid();
+            al_draw_text(font, al_map_rgb(255, 0, 0), 550, 100, ALLEGRO_ALIGN_LEFT, "Game Over! Press reset\nor press any key\nto continue");
+            al_flip_display();
+            if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+                if (ALLEGRO_KEY_Q) {
+                    count = 0;
+                    points = 0;
+                    gameLogic.reset_clear();
+                    al_clear_to_color(al_map_rgb(255, 255, 255));
+                    draw_grid();
+                    al_flip_display();
+                }
             }
         }
     }
     al_destroy_display(display);
     al_destroy_event_queue(eventQueue);
     al_destroy_font(font);
+    al_destroy_timer(timer);
 }
 void get_mouse_input(int x, int y, int &index1, int &index2) {
     if (x >= 0 && x < 99) {
@@ -212,19 +248,19 @@ void get_mouse_input(int x, int y, int &index1, int &index2) {
             index1 = 0;
             index2 = 2;
         }
-        else if (y >= 100 && y < 239) {
+        else if (y >= 120 && y < 239) {
             index1 = 1;
             index2 = 2;
         }
-        else if (y >= 200 && y < 359) {
+        else if (y >= 240 && y < 359) {
             index1 = 2;
             index2 = 2;
         }
-        else if (y >= 300 && y < 479) {
+        else if (y >= 360 && y < 479) {
             index1 = 3;
             index2 = 2;
         }
-        else if (y >= 400 && y < 599) {
+        else if (y >= 480 && y < 599) {
             index1 = 4;
             index2 = 2;
         }
@@ -234,19 +270,19 @@ void get_mouse_input(int x, int y, int &index1, int &index2) {
             index1 = 0;
             index2 = 3;
         }
-        else if (y >= 100 && y < 239) {
+        else if (y >= 120 && y < 239) {
             index1 = 1;
             index2 = 3;
         }
-        else if (y >= 200 && y < 359) {
+        else if (y >= 240 && y < 359) {
             index1 = 2;
             index2 = 3;
         }
-        else if (y >= 300 && y < 479) {
+        else if (y >= 360 && y < 479) {
             index1 = 3;
             index2 = 3;
         }
-        else if (y >= 400 && y < 599) {
+        else if (y >= 480 && y < 599) {
             index1 = 4;
             index2 = 3;
         }
@@ -256,19 +292,19 @@ void get_mouse_input(int x, int y, int &index1, int &index2) {
             index1 = 0;
             index2 = 4;
         }
-        else if (y >= 100 && y < 239) {
+        else if (y >= 120 && y < 239) {
             index1 = 1;
             index2 = 4;
         }
-        else if (y >= 200 && y < 359) {
+        else if (y >= 240 && y < 359) {
             index1 = 2;
             index2 = 4;
         }
-        else if (y >= 300 && y < 479) {
+        else if (y >= 360 && y < 479) {
             index1 = 3;
             index2 = 4;
         }
-        else if (y >= 400 && y < 599) {
+        else if (y >= 480 && y < 599) {
             index1 = 4;
             index2 = 4;
         }
