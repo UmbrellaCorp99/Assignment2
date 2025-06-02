@@ -2,19 +2,19 @@
 //Assignment 2
 
 #include "logic.h"
-#include <time.h>
 
 void logic::setup() {
-	for (int i = 0; i < 5; i++) {
+	std::string str = "aabbccddeeffgghhiijjkkll";
+	int count = 0;
+	for (int i = 0; i < 5; i++){
 		for (int j = 0; j < 5; j++) {
-			boardPattern[i][j] = 'n';
+			boardPattern[i][j] = str[count];
+			count++;
 		}
 	}
+	boardPattern[4][4] = 'z';
 }
 
-void logic::already_played() {
-
-}
 char logic::get_shape(int index, int index2) {
 	return boardPattern[index][index2];
 }
@@ -35,9 +35,7 @@ bool logic::compare(int i, int j, int k, int l) {
 	return same;
 }
 void logic::reset_clear() {
-}
-void logic::random_create() {
-	
+	setup();
 }
 void logic::correctGuess(int index, int index2) {
 	boardPattern[index][index2] = 'X';

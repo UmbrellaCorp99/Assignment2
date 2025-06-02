@@ -8,6 +8,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_native_dialog.h>
 #include "logic.h"
+#include <time.h>
 
 void get_mouse_input(int x, int y, int &index1, int &index2);
 void draw_objects(int index1, int index2, logic &gameLogic);
@@ -37,7 +38,8 @@ int main(void)
     int count = 0;
     int index1 = 0, index2 = 0, index3 = 0, index4 = 0;
     int points = 0;
-    
+    srand(time(0));
+
     ALLEGRO_DISPLAY *display = NULL;
     if (!al_init()) {
         al_show_native_message_box(NULL, "Error", "Allegro failed to initialize", 0, 0, ALLEGRO_MESSAGEBOX_ERROR);
@@ -69,7 +71,7 @@ int main(void)
     }
     gameLogic.setup();
     al_register_event_source(eventQueue, al_get_mouse_event_source());
-    
+
     draw_grid();
     al_flip_display();
     while (!done) {
@@ -90,17 +92,37 @@ int main(void)
             if (mx >= 0 and mx <= 600) {
                 if (count == 0) {
                     get_mouse_input(mx, my, index1, index2);
-                    draw_objects(index1, index2, gameLogic);
-                    al_flip_display();
-                    count++;
-                    flip = false;
+                    if (index1 == 4 && index2 == 4) {
+                        gameLogic.reset_clear();
+                        count = 0;
+                        points = 0;
+                        al_clear_to_color(al_map_rgb(255, 255, 255));
+                        draw_grid();
+                        al_flip_display();
+                    }
+                    else {
+                        draw_objects(index1, index2, gameLogic);
+                        al_flip_display();
+                        count++;
+                        flip = false;
+                    }
                 }
                 else if (count == 1) {
                     get_mouse_input(mx, my, index3, index4);
-                    draw_objects(index3, index4, gameLogic);
-                    al_flip_display();
-                    count++;
-                    flip = false;
+                    if (index3 == 4 && index4 == 4) {
+                        gameLogic.reset_clear();
+                        count = 0;
+                        points = 0;
+                        al_clear_to_color(al_map_rgb(255, 255, 255));
+                        draw_grid();
+                        al_flip_display();
+                    }
+                    else {
+                        draw_objects(index3, index4, gameLogic);
+                        al_flip_display();
+                        count++;
+                        flip = false;
+                    }
                 }
             }
         }
@@ -186,67 +208,67 @@ void get_mouse_input(int x, int y, int &index1, int &index2) {
         }
     }
     else if (x >= 200 && x < 299) {
-        if (y >= 0 && y < 99) {
+        if (y >= 0 && y < 119) {
             index1 = 0;
             index2 = 2;
         }
-        else if (y >= 100 && y < 199) {
+        else if (y >= 100 && y < 239) {
             index1 = 1;
             index2 = 2;
         }
-        else if (y >= 200 && y < 299) {
+        else if (y >= 200 && y < 359) {
             index1 = 2;
             index2 = 2;
         }
-        else if (y >= 300 && y < 399) {
+        else if (y >= 300 && y < 479) {
             index1 = 3;
             index2 = 2;
         }
-        else if (y >= 400 && y < 499) {
+        else if (y >= 400 && y < 599) {
             index1 = 4;
             index2 = 2;
         }
     }
     else if (x >= 300 && x < 399) {
-        if (y >= 0 && y < 99) {
+        if (y >= 0 && y < 119) {
             index1 = 0;
             index2 = 3;
         }
-        else if (y >= 100 && y < 199) {
+        else if (y >= 100 && y < 239) {
             index1 = 1;
             index2 = 3;
         }
-        else if (y >= 200 && y < 299) {
+        else if (y >= 200 && y < 359) {
             index1 = 2;
             index2 = 3;
         }
-        else if (y >= 300 && y < 399) {
+        else if (y >= 300 && y < 479) {
             index1 = 3;
             index2 = 3;
         }
-        else if (y >= 400 && y < 499) {
+        else if (y >= 400 && y < 599) {
             index1 = 4;
             index2 = 3;
         }
     }
     else if (x >= 400 && x < 499) {
-        if (y >= 0 && y < 99) {
+        if (y >= 0 && y < 119) {
             index1 = 0;
             index2 = 4;
         }
-        else if (y >= 100 && y < 199) {
+        else if (y >= 100 && y < 239) {
             index1 = 1;
             index2 = 4;
         }
-        else if (y >= 200 && y < 299) {
+        else if (y >= 200 && y < 359) {
             index1 = 2;
             index2 = 4;
         }
-        else if (y >= 300 && y < 399) {
+        else if (y >= 300 && y < 479) {
             index1 = 3;
             index2 = 4;
         }
-        else if (y >= 400 && y < 499) {
+        else if (y >= 400 && y < 599) {
             index1 = 4;
             index2 = 4;
         }
@@ -285,26 +307,46 @@ void draw_objects(int index1, int index2, logic &gameLogic) {
     else if (index2 == 4) {
         x = 450;
     }
-    if (gameLogic.get_shape(index1, index2) == 'r') {
+    if (gameLogic.get_shape(index1, index2) == 'a') {
         draw_rectangle(x, y);
     }
-    else if (gameLogic.get_shape(index1, index2) == 's') {
+    else if (gameLogic.get_shape(index1, index2) == 'b') {
         draw_square(x, y);
     }
     else if (gameLogic.get_shape(index1, index2) == 'c') {
         draw_circle(x, y);
     }
-    else if (gameLogic.get_shape(index1, index2) == 'o') {
+    else if (gameLogic.get_shape(index1, index2) == 'd') {
         draw_oval(x, y);
     }
-    else if (gameLogic.get_shape(index1, index2) == 't') {
+    else if (gameLogic.get_shape(index1, index2) == 'e') {
         draw_triangle(x, y);
     }
-    else if (gameLogic.get_shape(index1, index2) == 'a') {
+    else if (gameLogic.get_shape(index1, index2) == 'f') {
         draw_arc(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'g') {
+        draw_green_square(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'h') {
+        draw_red_circle(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'i') {
+        draw_orange_rectangle(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'j') {
+        draw_purple_oval(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'k') {
+        draw_yellow_triangle(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'l') {
+        draw_blue_arc(x, y);
     }
     else if (gameLogic.get_shape(index1, index2) == 'X') {
         draw_X(x, y);
+    }
+    else if (gameLogic.get_shape(index1, index2) == 'z') {
     }
 }
 void draw_grid() {
@@ -318,9 +360,12 @@ void draw_grid() {
     al_draw_line(0, 240, 500, 240, al_map_rgb(0, 0, 0), 1);
     al_draw_line(0, 360, 500, 360, al_map_rgb(0, 0, 0), 1);
     al_draw_line(0, 480, 500, 480, al_map_rgb(0, 0, 0), 1);
+
+    draw_status();
 }
 void draw_status() {
-
+    int x = 450, y = 580;
+    al_draw_filled_rectangle(x - 50, y - 100, x + 49, y + 60, al_map_rgb(0, 255, 0));
 }
 void draw_square(int x, int y) {
     al_draw_rectangle(x - 45, y - 45, x + 45, y + 45, al_map_rgb(255, 0, 0), 3);
